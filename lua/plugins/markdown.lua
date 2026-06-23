@@ -54,8 +54,16 @@ return {
       -- links, document symbols, go-to-definition, references, etc.
       opts.servers.marksman = {
         filetypes = { "markdown" },
-        root_dir = function(fname)
-          return util.root_pattern(".marksman.toml", ".git")(fname) or vim.fs.dirname(fname)
+        root_dir = function(bufnr, on_dir)
+          local fname = vim.api.nvim_buf_get_name(bufnr)
+
+          if fname == "" then
+            on_dir(vim.fn.getcwd())
+            return
+          end
+
+          local root = util.root_pattern(".marksman.toml", ".git")(fname)
+          on_dir(root or vim.fs.dirname(fname))
         end,
         single_file_support = true,
       }
