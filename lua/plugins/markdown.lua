@@ -31,6 +31,8 @@ return {
     opts = function(_, opts)
       opts.servers = opts.servers or {}
 
+      local util = require("lspconfig.util")
+
       local function read_spell_words()
         local words = {}
         local spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
@@ -52,6 +54,10 @@ return {
       -- links, document symbols, go-to-definition, references, etc.
       opts.servers.marksman = {
         filetypes = { "markdown" },
+        root_dir = function(fname)
+          return util.root_pattern(".marksman.toml", ".git")(fname) or vim.fs.dirname(fname)
+        end,
+        single_file_support = true,
       }
 
       -- LTeX gives grammar/style diagnostics through LanguageTool.
