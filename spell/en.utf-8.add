@@ -1,3 +1,9 @@
 algorithmically
 subtree
 dataflow
+IPC
+parallelization
+rowset
+Pipelined
+vectorized
+SIMD
